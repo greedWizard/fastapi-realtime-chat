@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 
 from domain.common.exceptions import DomainError
 
@@ -17,14 +18,16 @@ class TextLengthTooLongError(DomainError):
 
 
 @dataclass
-class MessageAlreadyReadError(DomainError):
-    @property
-    def message(self):
-        return 'You can not mark message as read when it\'s already read'
-
-
-@dataclass
 class MessageAlreadyDeletedError(DomainError):
     @property
     def message(self):
         return 'The message is already deleted'
+
+
+@dataclass
+class InvalidDateTime(DomainError):
+    invalid_datetime: datetime
+
+    @property
+    def message(self):
+        return f'Invalid date: {self.invalid_datetime}'
