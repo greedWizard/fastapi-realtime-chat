@@ -11,6 +11,9 @@ class ValueObject(Generic[VT, GT], metaclass=ABCMeta):
     __field__: ClassVar[str]
     value: VT
 
+    def __post_init__(self):
+        self.validate()
+
     def validate(self):
         ...
 

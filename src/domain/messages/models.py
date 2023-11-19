@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID, uuid4
@@ -14,19 +16,20 @@ from domain.messages.values import ChatTitle, MessageText
 
 @dataclass
 class Chat(AggregateRoot):
+    id: UUID = field(default_factory=uuid4, kw_only=True)  # noqa
     name: ChatTitle
     created_at: datetime = field(default_factory=datetime.utcnow, kw_only=True)
-    messages: list['Message'] = field(default_factory=list)
+    messages: list[Message] = field(default_factory=list)
 
     @classmethod
-    def create(cls, name: str) -> 'Chat':
-        chat_name = ChatTitle(name)
-        chat_name.validate()
-
-        chat = cls(chat_name)
+    def create(cls, name: ChatTitle) -> Chat:
+        chat = cls(name)
         chat.record_event(ChatCreated(chat.name.as_generic_type, chat.created_at))
 
         return chat
+
+    def add_message(self, message: Message) -> None:
+        self.messages.append(message)
 
     @property
     def messages_count(self) -> int:
@@ -41,10 +44,8 @@ class Message(AggregateRoot):
     created_at: datetime = field(kw_only=True, default_factory=datetime.utcnow)
     updated_at: datetime | None = field(kw_only=True, default=None)
 
-    def edit(self, text: str) -> 'Message':
-        self.text = MessageText(text)
-        self.text.validate()
-
+    def edit(self, text: MessageText) -> Message:
+        self.text = text
         self.updated_at = datetime.utcnow()
         self.record_event(
             MessageTextChanged(
@@ -56,10 +57,7 @@ class Message(AggregateRoot):
         return self
 
     @classmethod
-    def create(cls, text: str) -> 'Message':
-        message_text = MessageText(text)
-        message_text.validate()
-
+    def create(cls, message_text: MessageText) -> Message:
         message = cls(message_text)
         message.record_event(
             MessageCreated(

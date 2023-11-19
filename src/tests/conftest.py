@@ -2,7 +2,7 @@ import pytest
 from faker import Faker
 
 from domain.containers import common_container
-from infrastructure.dependencies.initialization import init_dependencies
+from logic.dependencies.initialization import init_dependencies
 
 
 @pytest.fixture(scope='session')

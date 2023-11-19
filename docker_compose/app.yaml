@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   fastapi:
-    container_name: messages-backend
+    container_name: chat-back
     build: ..
     command: uvicorn --factory presentation.api.app:create_app --host 0.0.0.0 --port 8000 --reload
     volumes:

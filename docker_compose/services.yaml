@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: bitnami/mongodb:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      ALLOW_EMPTY_PASSWORD: 'yes'
+    networks:
+      - backend
+    volumes:
+      - dbdata6:/data/db
+
+volumes:
+  dbdata6:
+
+networks:
+  backend:
+    driver: bridge

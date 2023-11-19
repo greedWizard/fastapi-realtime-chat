@@ -1,6 +1,6 @@
 DC = docker-compose
 APP_FILE = docker_compose/app.yaml
-SERVICES = docker_compose/storages.yaml
+SERVICES = docker_compose/services.yaml
 
 .PHONY: app
 app:
@@ -29,3 +29,8 @@ drop-services:
 .PHONY: app-logs
 app-logs:
 	${DC} -f ${APP_FILE} logs -f
+
+
+.PHONY: logs
+logs:
+	${DC} -f ${APP_FILE} -f ${SERVICES} logs -f

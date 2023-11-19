@@ -1,2 +1,9 @@
 messages:
   text_max_length: 255
+db:
+  mongo_db_url: ${MONGO_DB_URL}
+  mongo_db_name: ${MONGO_DB_NAME}
+chat:
+  title_max_length: 255
+  db_name: 'chat_db'
+  collection_name: 'chats'
