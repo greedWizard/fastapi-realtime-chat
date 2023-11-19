@@ -12,3 +12,13 @@ class CreateChatResponseSchema(BaseModel):
     created_at: datetime
     name: str
     messages: list
+
+
+class CreateMessageSchema(BaseModel):
+    text: str
+
+
+class CreateMessageResponseSchema(BaseModel):
+    id: str  # noqa
+    text: str
+    created_at: datetime

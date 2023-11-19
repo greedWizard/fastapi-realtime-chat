@@ -6,8 +6,9 @@ from logic.exceptions import CommandHandlerNotFoundError
 
 @dataclass
 class Mediator:
-    commands_map: list[tuple[type[Command], CommandHandler]] = field(
-        default_factory=list,
+    commands_map: dict[type[Command], CommandHandler] = field(
+        kw_only=True,
+        default_factory=dict,
     )
 
     def register_command(
@@ -15,7 +16,7 @@ class Mediator:
         command: type[Command[CR]],
         handler: CommandHandler[Command[CR], CR],
     ):
-        self.commands_map.append((command, handler))
+        self.commands_map[command] = handler
 
     async def execute_command(self, command: Command[CR]) -> CR:
         handler = self._find_handler(command.__class__)
@@ -27,13 +28,6 @@ class Mediator:
 
     def _find_handler(
         self,
-        command: type[Command[CR]],
+        input_command: type[Command[CR]],
     ) -> CommandHandler[Command, CR] | None:
-        try:
-            return next(
-                handler
-                for handler_command, handler in self.commands_map
-                if isinstance(handler_command, type(command))
-            )
-        except StopIteration:
-            return None
+        return self.commands_map.get(input_command)

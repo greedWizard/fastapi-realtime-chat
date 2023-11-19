@@ -5,7 +5,8 @@ CR = TypeVar('CR')
 
 
 class Command(ABC, Generic[CR]):
-    ...
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
 
 
 C = TypeVar('C', bound=Command[Any])

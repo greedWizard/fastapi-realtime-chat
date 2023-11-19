@@ -21,7 +21,7 @@ class CreateChatHandler(CommandHandler[CreateChatCommand, ChatDTO]):
     async def __call__(self, command: CreateChatCommand) -> ChatDTO:
         chat = Chat.create(ChatTitle(command.name))
 
-        if await self.chat_repo.chat_already_exists(command.name):
+        if await self.chat_repo.does_chat_exist(command.name):
             raise ChatAlreadyExistsError(command.name)
 
         await self.chat_repo.create_chat(chat)
